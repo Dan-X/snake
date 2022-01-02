@@ -40,7 +40,7 @@ const getNewApple = (snake: [number, number][], boardSize: number) => {
 
 const defaultParameters = {
   velocity: [1, 0] as [number, number],
-  snakeLength: 10,
+  snakeLength: 30,
   snake: [[0, 0]] as [number, number][],
   gameOver: false,
   getApple: (boardSize: number) => [
@@ -66,12 +66,13 @@ export const SnakeBoard = (props: Props) => {
   const [updating, setIsUpdating] = useState(true);
 
   const toggleUpdate = () => setIsUpdating(prev => !prev);
+
   const restartGame = useCallback(() => {
     setVelocity(defaultParameters.velocity);
     setSnakeLenth(defaultParameters.snakeLength);
     setSnake(defaultParameters.snake);
-    setGameOver(defaultParameters.gameOver);
-    toggleUpdate();
+    setGameOver(false);
+    setIsUpdating(true);
   }, [])
 
   const keydownHdl = useCallback((e: KeyboardEvent) => {
@@ -95,7 +96,13 @@ export const SnakeBoard = (props: Props) => {
         break;
       case "Escape":
       case " ":
-        if (gameOver) { restartGame() } else { toggleUpdate() }
+        console.log('spacekey')
+        if (gameOver) { 
+          console.log('restarting')
+          restartGame() 
+        } else { 
+          setIsUpdating(prev => !prev);
+        }
         break;
     }
   }, [canChangeDirection, gameOver, restartGame])
