@@ -10,8 +10,8 @@ const getNewHead = (snakeHead: [number, number], velocity: [number, number], boa
 
 const getNewApple = (snake: [number, number][], boardSize: number) => {
   let newApple = [
-    Math.floor(Math.random() * boardSize),
-    Math.floor(Math.random() * boardSize),
+    Math.floor(Math.random() * boardSize - 1),
+    Math.floor(Math.random() * boardSize - 1),
   ] as [number, number]
   if(hasCollision(snake, newApple)) {
     newApple = getNewApple(snake, boardSize);
