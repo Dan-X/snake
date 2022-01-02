@@ -1,7 +1,20 @@
 .App {
   text-align: center;
+  display: flex;
+  justify-content: center;
+  column-gap: 20px;
 }
+.Panel {
+  flex: 0 1 auto;
+}
+.leftPanel {
+  width: 400px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  row-gap: 0.1rem;
 
+}
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;

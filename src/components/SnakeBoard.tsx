@@ -5,18 +5,31 @@ interface Props {
 
 }
 
-const draw = (canvasRef: React.RefObject<HTMLCanvasElement>, snake: [number, number][], apple: [number, number], wall:[number, number][], pixelSize: number) => {
+const drawColors = {
+  snake: '#377eb8',
+  forbitArea: 'white', // '#fbb4ae',
+  apple: '#e41a1c',
+  walls: '#e5d8bd',
+  border: '#000000',
+  borderPause: '#fdb462',
+  borderGameOver: '#fb8072',
+}
+
+const draw = (canvasRef: React.RefObject<HTMLCanvasElement>, snake: [number, number][], apple: [number, number], wall: [number, number][], forbitArea: [number, number][], pixelSize: number) => {
   if (!canvasRef.current) return;
   const canvas = canvasRef.current;
   const ctx = canvas.getContext('2d');
   if (!ctx) return;
   // draw
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.fillStyle = '#0000aa'
+  ctx.fillStyle = drawColors.forbitArea;
+  forbitArea.forEach(block => ctx.fillRect(block[0] * pixelSize, block[1] * pixelSize, pixelSize, pixelSize))
+  ctx.fillStyle = drawColors.snake;
   snake.forEach(block => ctx.fillRect(block[0] * pixelSize, block[1] * pixelSize, pixelSize, pixelSize))
-  ctx.fillStyle = '#ff0000'
+  
+  ctx.fillStyle = drawColors.apple;
   ctx.fillRect(apple[0] * pixelSize, apple[1] * pixelSize, pixelSize, pixelSize)
-  ctx.fillStyle = '#000000'
+  ctx.fillStyle = drawColors.walls;
   wall.forEach(block => ctx.fillRect(block[0] * pixelSize, block[1] * pixelSize, pixelSize, pixelSize))
 }
 
@@ -27,9 +40,9 @@ export const SnakeBoard = (props: Props) => {
   const boardSize = 50;
   const pixelSize = canvasSize / boardSize;
   const updateInterval = 50;
-  const refreshWallsInterval = 3000;
+  const refreshWallsInterval = 30000;
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const forbitArea = useRef<[number,number][]>()
+  const forbitArea = useRef<[number, number][]>()
 
   const { wall, refreshWalls } = useWalls(3, 10, boardSize)
   const {
@@ -40,8 +53,19 @@ export const SnakeBoard = (props: Props) => {
     resetSnake,
     updateSnake
   } = useSnake(wall, boardSize)
-  forbitArea.current = [...snake, apple];
-  
+
+  const calculateSnakeForbitArea = (snake: [number, number][]) => {
+    let neighourhood = [...snake];
+    const surrounding = [[0,1],[0,2],[1,0],[2,0]]
+    surrounding.forEach(s => {
+      const newN1 = snake.map(block => [block[0]+s[0], block[1]+s[1]] as [number, number]);
+      const newN2 = snake.map(block => [block[0]-s[0], block[1]-s[1]] as [number, number]);
+      neighourhood = [...neighourhood, ...newN1, ...newN2]
+    })
+    return neighourhood;
+  }
+  forbitArea.current = [...calculateSnakeForbitArea(snake), apple];
+
   const [gameOver, setGameOver] = useState(false);
   const [updating, setIsUpdating] = useState(true);
 
@@ -68,7 +92,7 @@ export const SnakeBoard = (props: Props) => {
   }, [gameOver, restartGameHdl])
 
   useEffect(() => {
-    draw(canvasRef, snake, apple, wall, pixelSize);
+    draw(canvasRef, snake, apple, wall, forbitArea.current || [], pixelSize);
   }, [apple, pixelSize, snake, wall])
 
   useEffect(() => {
@@ -86,7 +110,7 @@ export const SnakeBoard = (props: Props) => {
     console.log('setUpdateWallInterval')
     const interval = setInterval(() => {
       if (updating && !gameOver && forbitArea.current) {
-        refreshWalls(forbitArea.current );
+        refreshWalls(forbitArea.current);
       }
     }, refreshWallsInterval);
     return () => {
@@ -110,18 +134,18 @@ export const SnakeBoard = (props: Props) => {
   }, [collision])
 
 
-  const canvasStyle = gameOver ? { border: '2px solid red' } : { border: '2px solid black' }
+  const canvasStyle = gameOver ? { border: '2px solid red' } : updating ? { border: '2px solid black' } : { border: '2px solid orange' }
 
   return (
     <div>
       <div>
-        <input type="checkbox" id="scales" name="scales"
+        {/* <input type="checkbox" id="scales" name="scales"
           onChange={() => { setIsUpdating(prev => !prev) }}
           checked={updating} />
-        <label htmlFor="scales">On</label>
+        <label htmlFor="scales">On</label> */}
       </div>
       <canvas id="snakeboard" ref={canvasRef} width={canvasSize} height={canvasSize} style={canvasStyle} />
-      <p>lengh: {snakeLength}</p>
+      <p>score: {snakeLength - 30}</p>
     </div>
 
   )
