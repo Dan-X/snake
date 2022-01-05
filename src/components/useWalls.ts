@@ -28,7 +28,7 @@ const getWalls = (numOfWalls: number, wallLength: number, forbitArea: [number, n
   let walls = [] as [number, number][];
   for (let i = 0; i < numOfWalls; i++) {
     const newWall = getARandomWall(wallLength, forbitArea, boardSize);
-    console.log("wall: ", newWall)
+    // console.log("wall: ", newWall)
     walls = [...walls, ...newWall]
   }
   return walls

@@ -10,8 +10,8 @@ const getNewHead = (snakeHead: [number, number], velocity: [number, number], boa
 
 const getNewApple = (snake: [number, number][], boardSize: number) => {
   let newApple = [
-    Math.floor(Math.random() * boardSize),
-    Math.floor(Math.random() * boardSize),
+    Math.floor(Math.random() * boardSize ),
+    Math.floor(Math.random() * boardSize ),
   ] as [number, number]
   if(hasCollision(snake, newApple)) {
     newApple = getNewApple(snake, boardSize);
@@ -90,7 +90,7 @@ export const useSnake = (forbitArea: [number, number][],boardSize: number, ) => 
         setSnakeLenth(prev => prev + 1)
         newSnake.push(newHead);
         
-        setApple(getNewApple(snake, boardSize))
+        setApple(getNewApple([...snake, ...forbitArea], boardSize))
       } else if (snake.length === snakeLength) {
         newSnake.shift();
         newSnake.push(newHead);
@@ -103,8 +103,23 @@ export const useSnake = (forbitArea: [number, number][],boardSize: number, ) => 
 
   }, [apple, boardSize, forbitArea, snakeLength, velocity])
 
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     const testApple = getNewApple(snake, boardSize);
+  //     if (testApple[0] > boardSize-1 || 
+  //       testApple[0] < 0 || 
+  //       testApple[1] > boardSize-1 || 
+  //       testApple[0] < 0
+  //       ) {
+  //         console.log('testApple: ', testApple)
+  //       }
+      
+  //   }, 10);
+  //   return () => {
+  //     clearInterval(interval);
+  //   };
+  // }, [boardSize, snake, updateSnake]);
   
-
   useEffect(() => {
     window.addEventListener('keydown', ctlKeydownHdl);
 

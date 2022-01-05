@@ -11,6 +11,7 @@ function App() {
       <div className='Panel leftPanel'>
           <p>awds or arrow keys to control directions</p> 
           <p>space(or esc) to pause/restart. </p>
+          <p>A* pathfinding algorithm is illustrated during pause </p>
           <p>walls update every 30 sec</p>
       </div>
       <div className='Panel'>
