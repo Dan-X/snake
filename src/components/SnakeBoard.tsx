@@ -79,7 +79,7 @@ export const SnakeBoard = (props: Props) => {
   const forbitArea = useRef<[number, number][]>()
 
   const size = useWindowSize();
-  const canvasSize = Math.floor(Math.min(size.width, size.height)-70);
+  const canvasSize = Math.floor((Math.min(size.width, size.height)-70)/boardSize)*50;
   
   const pixelSize = canvasSize / boardSize;
   
