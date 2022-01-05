@@ -3,6 +3,7 @@ import { useSnake } from './useSnake';
 import { useWalls } from './useWalls';
 
 import {usePathfinding} from './usePathfinding';
+import { useWindowSize } from './useWindowSize';
 interface Props {
 
 }
@@ -71,14 +72,17 @@ const draw = (
 
 export const SnakeBoard = (props: Props) => {
 
-  const canvasSize = 700;
   const boardSize = 50;
-  const pixelSize = canvasSize / boardSize;
   const updateInterval = 50;
   const refreshWallsInterval = 30000;
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const forbitArea = useRef<[number, number][]>()
 
+  const size = useWindowSize();
+  const canvasSize = Math.floor(Math.min(size.width, size.height)-70);
+  
+  const pixelSize = canvasSize / boardSize;
+  
   const { wall, refreshWalls } = useWalls(5, 20, boardSize)
   const {
     snake,
