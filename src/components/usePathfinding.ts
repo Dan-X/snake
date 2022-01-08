@@ -1,6 +1,5 @@
-import { useCallback, useEffect, useState } from "react";
-
-import { aStar, aStarStepwise } from "../pathFinding/aStar";
+import { useEffect, useState } from "react";
+import { aStarStepwise } from "../pathFinding/aStar";
 
 export const usePathfinding = (
   updating: boolean,
@@ -15,7 +14,9 @@ export const usePathfinding = (
   const [openNodes, setOpenNodes] = useState<[number, number][]>([]);
   const [step, setStep] = useState(0)
   // const [hasNextStep, setHasNextStep] = useState(true)
+   
   useEffect(() => {
+
     if (!updating && !gameOver) {
       const { path, closedNodes, openNodes, hasNextStep } = aStarStepwise(step, snake[snake.length - 1], apple, boardSize, [...wall, ...snake]);
       setPath(path.map((node) => node.coord));
@@ -23,9 +24,8 @@ export const usePathfinding = (
       setOpenNodes(openNodes.map((node) => node.coord));
       // console.log(hasNextStep)
       if(hasNextStep) {
-        setTimeout(()=>setStep(prev => prev+1),10)
+        setTimeout(()=>setStep(prev => prev+1),5)
       }
-      // setHasNextStep(hasNextStep)
     }
   }, [apple, boardSize, gameOver, snake, step, updating, wall]);
 
@@ -36,5 +36,5 @@ export const usePathfinding = (
     setStep(0);
   }
 
-  return { path, closedNodes, openNodes, resetStep};
+  return { path, closedNodes, openNodes, step, resetStep};
 };

@@ -108,7 +108,7 @@ export const SnakeBoard = (props: Props) => {
   const [gameOver, setGameOver] = useState(false);
   const [updating, setIsUpdating] = useState(true);
 
-  const {path, closedNodes, openNodes, resetStep} = usePathfinding(updating, gameOver, snake, wall, apple, boardSize);
+  const {path, closedNodes, openNodes, step, resetStep} = usePathfinding(updating, gameOver, snake, wall, apple, boardSize);
 
   const restartGameHdl = useCallback(() => {
     resetSnake();
@@ -125,8 +125,8 @@ export const SnakeBoard = (props: Props) => {
           resetStep();
           restartGameHdl()
         } else {
-          setIsUpdating(prev => !prev);
           resetStep();
+          setIsUpdating(prev => !prev);
         }
         break;
     }
@@ -186,7 +186,7 @@ export const SnakeBoard = (props: Props) => {
         <label htmlFor="scales">On</label> */}
       </div>
       <canvas id="snakeboard" ref={canvasRef} width={canvasSize} height={canvasSize} style={canvasStyle} />
-      <p>score: {snakeLength - 30}</p>
+      <p>score: {snakeLength - 30} </p> 
 
     </div>
 

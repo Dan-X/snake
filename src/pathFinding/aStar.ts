@@ -6,7 +6,6 @@ import { PriorityQueue } from "./PiorityQueue";
 const getManhattanDistance = (p1: [number, number], p2: [number, number]) => {
   return Math.abs(p1[0] - p2[0]) + Math.abs(p1[1] - p2[1]);
 };
-
 class Node {
   // readonly coord: [number, number];
   static boardSize: number = 100;
@@ -57,15 +56,9 @@ class OpenQueue extends PriorityQueue<Node> {
     return this._heap
   }
   _replaceNode(foundIdx: number, newNode: Node) {
-    // const foundIdx = this._heap.findIndex(
-    //   (node) => node.coord[0] === newNode.coord[0] && node.coord[1] === newNode.coord[1]
-    // );
     const replacedValue = this._heap[foundIdx];
-    if (replacedValue.f === newNode.f) return replacedValue;
-    this._heap[foundIdx] = newNode;
-    if (this._comparator(replacedValue, newNode)) {
-      this._siftDown(foundIdx);
-    }else {
+    if (replacedValue.f > newNode.f) {
+      this._heap[foundIdx] = newNode;
       this._siftUp(foundIdx)
     }
     return replacedValue;
@@ -180,6 +173,3 @@ export const aStarStepwise =  (
   return { path, openNodes: openQueue.openNodes, closedNodes, hasNextStep: !(step<stepLim)};
 
 };
-
-// const path = aStar([1,1], [9,9], 10);
-// console.log(path.map(node => node.coord))

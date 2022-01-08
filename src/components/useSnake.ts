@@ -1,7 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
 
-
-
 const hasCollision = (forbitArea: [number, number][], newHead: [number, number]) => forbitArea.some(block => block[0] === newHead[0] && block[1] === newHead[1]) 
 const getNewHead = (snakeHead: [number, number], velocity: [number, number], boardSize: number) => snakeHead.map((headCoord, i) => {
   // if (i===1) console.log(headCoord, headCoord + velocity[i])
