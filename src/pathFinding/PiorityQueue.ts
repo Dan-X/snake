@@ -1,3 +1,4 @@
+// https://stackoverflow.com/questions/42919469/efficient-way-to-implement-priority-queue-in-javascript
 const top = 0;
 const parent = (i: number) => ((i + 1) >>> 1) - 1;
 const left = (i: number)  => (i << 1) + 1;
