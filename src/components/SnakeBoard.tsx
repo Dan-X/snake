@@ -108,7 +108,7 @@ export const SnakeBoard = (props: Props) => {
   const [gameOver, setGameOver] = useState(false);
   const [updating, setIsUpdating] = useState(true);
 
-  const {path, closedNodes, openNodes, step, resetStep} = usePathfinding(updating, gameOver, snake, wall, apple, boardSize);
+  const {path, closedNodes, openNodes, resetStep} = usePathfinding(updating, gameOver, snake, wall, apple, boardSize);
 
   const restartGameHdl = useCallback(() => {
     resetSnake();
@@ -139,13 +139,13 @@ export const SnakeBoard = (props: Props) => {
   useEffect(() => {
     const interval = setInterval(() => {
       if (updating && !gameOver) {
-        updateSnake();
+        updateSnake([...wall, ...snake], apple);
       }
     }, updateInterval);
     return () => {
       clearInterval(interval);
     };
-  }, [gameOver, updateSnake, updating]);
+  }, [apple, gameOver, snake, updateSnake, updating, wall]);
 
   useEffect(() => {
     // console.log('setUpdateWallInterval')

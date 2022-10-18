@@ -36,5 +36,5 @@ export const usePathfinding = (
     setStep(0);
   }
 
-  return { path, closedNodes, openNodes, step, resetStep};
+  return { path, closedNodes, openNodes, resetStep};
 };

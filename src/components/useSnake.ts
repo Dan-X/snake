@@ -6,13 +6,13 @@ const getNewHead = (snakeHead: [number, number], velocity: [number, number], boa
   return (headCoord + velocity[i] > boardSize - 1) ? 0 : (headCoord + velocity[i] < 0 ? boardSize - 1 : headCoord + velocity[i])
 }) as [number, number]
 
-const getNewApple = (snake: [number, number][], boardSize: number) => {
+const getNewApple = (forbitArea: [number, number][], boardSize: number) => {
   let newApple = [
     Math.floor(Math.random() * boardSize ),
     Math.floor(Math.random() * boardSize ),
   ] as [number, number]
-  if(hasCollision(snake, newApple)) {
-    newApple = getNewApple(snake, boardSize);
+  if(hasCollision(forbitArea, newApple)) {
+    newApple = getNewApple(forbitArea, boardSize);
   }
   return newApple;
 }
@@ -22,10 +22,10 @@ const defaultParameters = {
   snakeLength: 30,
   snake: [[0, 0]] as [number, number][],
   gameOver: false,
-  getApple: (boardSize: number) => [
-    Math.floor(Math.random() * boardSize),
-    Math.floor(Math.random() * boardSize),
-  ] as [number, number]
+  // getApple: (boardSize: number) => [
+  //   Math.floor(Math.random() * boardSize),
+  //   Math.floor(Math.random() * boardSize),
+  // ] as [number, number]
 }
 
 export const useSnake = (forbitArea: [number, number][],boardSize: number, ) => {
@@ -33,7 +33,9 @@ export const useSnake = (forbitArea: [number, number][],boardSize: number, ) => 
   const [velocity, setVelocity] = useState<[number, number]>(defaultParameters.velocity);
   const [snakeLength, setSnakeLenth] = useState(defaultParameters.snakeLength);
   const [snake, setSnake] = useState<[number, number][]>(defaultParameters.snake);
-  const [apple, setApple] = useState<[number, number]>(defaultParameters.getApple(boardSize));
+  // const [apple, setApple] = useState<[number, number]>(defaultParameters.getApple(boardSize));
+  const [apple, setApple] = useState<[number, number]>(getNewApple(forbitArea, boardSize));
+
   const [canChangeDirection, setCanChangeDirection] = useState(false);
   const [collision, setCollision] = useState(false);
 
@@ -72,7 +74,7 @@ export const useSnake = (forbitArea: [number, number][],boardSize: number, ) => 
 
 
 
-  const updateSnake= useCallback(() => {
+  const updateSnake= useCallback((forbitArea: [number, number][], apple: [number, number]) => {
     setSnake(snake => {
       const newSnake = [...snake]
       const snakeHead = snake[snake.length - 1]
@@ -99,7 +101,7 @@ export const useSnake = (forbitArea: [number, number][],boardSize: number, ) => 
     })
     setCanChangeDirection(true);
 
-  }, [apple, boardSize, forbitArea, snakeLength, velocity])
+  }, [boardSize, snakeLength, velocity])
 
   // useEffect(() => {
   //   const interval = setInterval(() => {
